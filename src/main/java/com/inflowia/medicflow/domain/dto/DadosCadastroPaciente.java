@@ -1,4 +1,4 @@
-package com.inflowia.medicflow.domain.paciente.dto;
+package com.inflowia.medicflow.domain.dto;
 
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.br.CPF;

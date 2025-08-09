@@ -1,12 +1,16 @@
 package com.inflowia.medicflow.domain.paciente;
 
-import com.inflowia.medicflow.domain.endereco.Endreco;
 import jakarta.persistence.*;
 import lombok.*;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.br.CPF;
 
+import com.inflowia.medicflow.domain.dto.DadosAtualizacaoPaciente;
+import com.inflowia.medicflow.domain.medicamento.MedicamentoPrescrito;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Entidade que representa os dados de um paciente no sistema MedicFlow.
@@ -18,6 +22,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+
+
 public class Paciente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,4 +50,21 @@ public class Paciente {
 
     private String planoSaude;
 
+    @Builder.Default
+    private boolean ativo = true;
+
+    public void atualizarInformacoes(DadosAtualizacaoPaciente dados){
+    if (dados.nome() != null) this.nome = dados.nome();
+    if (dados.telefone() != null) this.telefone = dados.telefone();
+    if (dados.email() != null) this.email = dados.email();
+    if (dados.dataNascimento() != null) this.dataNascimento = dados.dataNascimento();
+    if (dados.endereco() != null) this.endereco.atualizarInformacoes(dados.endereco());
 }
+
+@Builder.Default
+@OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MedicamentoPrescrito> medicamentosAtuais = new ArrayList<>();
+
+}
+
+
